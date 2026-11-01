@@ -1,0 +1,15 @@
+.scene .narrative-typed { display: grid; white-space: pre-line; }
+.narrative-typed::before { content: attr(data-text); visibility: hidden; grid-area: 1 / 1; }
+.narrative-typed > span { grid-area: 1 / 1; }
+.narrative-hidden { visibility: hidden; pointer-events: none; }
+.narrative-block-enter { animation: reveal-up 700ms ease both; }
+.narrative-button-enter { animation: narrative-button-in 1600ms cubic-bezier(.42,0,.2,1) both; }
+.scene--whatsapp .whatsapp-fields { display: grid; gap: 12px; }
+@keyframes narrative-button-in {
+  from { opacity: 0; transform: translateY(10px); filter: blur(3px); }
+  50% { opacity: .35; }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .narrative-block-enter, .narrative-button-enter { animation: none; }
+}

@@ -1,22 +1,22 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import musicUrl from '../assets/audio/emr-experience.mp3'
 
-const INITIAL_VOLUME = 0.08
-const MAX_VOLUME = 0.42
+const INITIAL_VOLUME = 0.15
+const MAX_VOLUME = 1
 const FADE_IN_MS = 4500
 const SCENE_VOLUMES = [
   INITIAL_VOLUME,
-  0.14,
-  0.18,
-  0.26,
-  MAX_VOLUME,
-  0.34,
-  0.32,
-  0.34,
-  0.32,
-  0.32,
-  0.34,
-  0.37,
+  0.20,
+  0.28,
+  0.35,
+  0.45,
+  0.52,
+  0.58,
+  0.65,
+  0.72,
+  0.78,
+  0.85,
+  0.92,
   MAX_VOLUME,
 ]
 

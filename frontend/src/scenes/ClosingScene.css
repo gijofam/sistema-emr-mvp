@@ -1,0 +1,5 @@
+.closing-typed { display: grid; white-space: pre-line; }
+.closing-typed::before { content: attr(data-text); visibility: hidden; grid-area: 1 / 1; }
+.closing-typed > span { grid-area: 1 / 1; }
+.closing-tap-hint { padding: 10px; border: 0; background: none; cursor: pointer; }
+.closing-tap-hint:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
