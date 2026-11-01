@@ -1,0 +1,829 @@
+[
+  {
+    "id": "schema.public",
+    "label": "Create schema \"public\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres"
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "Create schema \"public\"",
+        "sql": "CREATE SCHEMA IF NOT EXISTS \"public\"",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "table.contactoWhatsapp",
+    "label": "Create table \"contactoWhatsapp\"",
+    "summary": "Creates table \"contactoWhatsapp\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "contactoWhatsapp"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"contactoWhatsapp\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"contactoWhatsapp\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"contactoWhatsapp\"",
+        "sql": "CREATE TABLE \"public\".\"contactoWhatsapp\" (\n  \"activo\" bool DEFAULT true NOT NULL,\n  \"fechaRegistro\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id\" SERIAL NOT NULL,\n  \"numero\" text NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"contactoWhatsapp\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"contactoWhatsapp\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.frase",
+    "label": "Create table \"frase\"",
+    "summary": "Creates table \"frase\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "frase"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"frase\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"frase\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"frase\"",
+        "sql": "CREATE TABLE \"public\".\"frase\" (\n  \"activa\" bool DEFAULT true NOT NULL,\n  \"categoria\" text NOT NULL,\n  \"codigo\" int4 NOT NULL,\n  \"fechaCreacion\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id\" SERIAL NOT NULL,\n  \"texto\" text NOT NULL,\n  \"vecesMostrada\" int4 DEFAULT 0 NOT NULL,\n  PRIMARY KEY (\"id\"),\n  CONSTRAINT \"frase_categoria_check_2c70cf02\" CHECK (\"categoria\" IN ('DISCIPLINA', 'QUIEBRE', 'RENACER', 'EVOLUCION', 'FORTALEZA_MENTAL', 'RESILIENCIA', 'PROPOSITO', 'CONSTANCIA', 'ENTRENAMIENTO', 'MENTALIDAD', 'PACIENCIA', 'SUPERACION')),\n  CONSTRAINT \"frase_codigo_positivo_eecf4a65\" CHECK (\"codigo\" > 0),\n  CONSTRAINT \"frase_veces_mostrada_no_negativa_eff9835d\" CHECK (\"vecesMostrada\" >= 0)\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"frase\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"frase\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.mensajePrenda",
+    "label": "Create table \"mensajePrenda\"",
+    "summary": "Creates table \"mensajePrenda\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "mensajePrenda"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"mensajePrenda\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"mensajePrenda\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"mensajePrenda\"",
+        "sql": "CREATE TABLE \"public\".\"mensajePrenda\" (\n  \"fechaDesbloqueo\" timestamptz DEFAULT (now()) NOT NULL,\n  \"fraseId\" int4 NOT NULL,\n  \"id\" SERIAL NOT NULL,\n  \"numeroMensaje\" int4 NOT NULL,\n  \"prendaId\" int4 NOT NULL,\n  PRIMARY KEY (\"id\"),\n  CONSTRAINT \"mensaje_prenda_numero_valido_a54d5778\" CHECK (\"numeroMensaje\" BETWEEN 1 AND 3)\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"mensajePrenda\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"mensajePrenda\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.prenda",
+    "label": "Create table \"prenda\"",
+    "summary": "Creates table \"prenda\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "prenda"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"prenda\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"prenda\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"prenda\"",
+        "sql": "CREATE TABLE \"public\".\"prenda\" (\n  \"contactoWhatsappId\" int4,\n  \"estado\" text DEFAULT 'GENERADA' NOT NULL,\n  \"etapaEmr\" text NOT NULL,\n  \"fechaActivacion\" timestamptz,\n  \"fechaCreacion\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id\" SERIAL NOT NULL,\n  \"tipoPrenda\" text NOT NULL,\n  \"token\" text NOT NULL,\n  PRIMARY KEY (\"id\"),\n  CONSTRAINT \"prenda_estado_check_44fc3b73\" CHECK (\"estado\" IN ('GENERADA', 'ACTIVA', 'COMPLETADA', 'INACTIVA')),\n  CONSTRAINT \"prenda_etapaEmr_check_1c4919c1\" CHECK (\"etapaEmr\" IN ('QUIEBRE', 'RENACER', 'EVOLUCION'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"prenda\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"prenda\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.referido",
+    "label": "Create table \"referido\"",
+    "summary": "Creates table \"referido\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "referido"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"referido\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"referido\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"referido\"",
+        "sql": "CREATE TABLE \"public\".\"referido\" (\n  \"codigoReferido\" text NOT NULL,\n  \"estado\" text DEFAULT 'PENDIENTE' NOT NULL,\n  \"fechaConversion\" timestamptz,\n  \"fechaCreacion\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id\" SERIAL NOT NULL,\n  \"prendaOrigenId\" int4 NOT NULL,\n  PRIMARY KEY (\"id\"),\n  CONSTRAINT \"referido_estado_check_2f928fc9\" CHECK (\"estado\" IN ('PENDIENTE', 'CONVERTIDO'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"referido\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"referido\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.contactoWhatsapp.contactoWhatsapp_numero_key",
+    "label": "Add unique constraint on \"contactoWhatsapp\" (numero)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "contactoWhatsapp_numero_key",
+        "table": "contactoWhatsapp"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"contactoWhatsapp_numero_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "contactoWhatsapp_numero_key",
+          "public",
+          "\"public\".\"contactoWhatsapp\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"contactoWhatsapp_numero_key\"",
+        "sql": "ALTER TABLE \"public\".\"contactoWhatsapp\" ADD CONSTRAINT \"contactoWhatsapp_numero_key\" UNIQUE (\"numero\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"contactoWhatsapp_numero_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "contactoWhatsapp_numero_key",
+          "public",
+          "\"public\".\"contactoWhatsapp\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.frase.frase_codigo_key",
+    "label": "Add unique constraint on \"frase\" (codigo)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "frase_codigo_key",
+        "table": "frase"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"frase_codigo_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "frase_codigo_key",
+          "public",
+          "\"public\".\"frase\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"frase_codigo_key\"",
+        "sql": "ALTER TABLE \"public\".\"frase\" ADD CONSTRAINT \"frase_codigo_key\" UNIQUE (\"codigo\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"frase_codigo_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "frase_codigo_key",
+          "public",
+          "\"public\".\"frase\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.mensajePrenda.mensajePrenda_prendaId_numeroMensaje_key",
+    "label": "Add unique constraint on \"mensajePrenda\" (prendaId, numeroMensaje)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "mensajePrenda_prendaId_numeroMensaje_key",
+        "table": "mensajePrenda"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"mensajePrenda_prendaId_numeroMensaje_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "mensajePrenda_prendaId_numeroMensaje_key",
+          "public",
+          "\"public\".\"mensajePrenda\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"mensajePrenda_prendaId_numeroMensaje_key\"",
+        "sql": "ALTER TABLE \"public\".\"mensajePrenda\" ADD CONSTRAINT \"mensajePrenda_prendaId_numeroMensaje_key\" UNIQUE (\"prendaId\", \"numeroMensaje\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"mensajePrenda_prendaId_numeroMensaje_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "mensajePrenda_prendaId_numeroMensaje_key",
+          "public",
+          "\"public\".\"mensajePrenda\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.mensajePrenda.mensajePrenda_prendaId_fraseId_key",
+    "label": "Add unique constraint on \"mensajePrenda\" (prendaId, fraseId)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "mensajePrenda_prendaId_fraseId_key",
+        "table": "mensajePrenda"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"mensajePrenda_prendaId_fraseId_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "mensajePrenda_prendaId_fraseId_key",
+          "public",
+          "\"public\".\"mensajePrenda\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"mensajePrenda_prendaId_fraseId_key\"",
+        "sql": "ALTER TABLE \"public\".\"mensajePrenda\" ADD CONSTRAINT \"mensajePrenda_prendaId_fraseId_key\" UNIQUE (\"prendaId\", \"fraseId\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"mensajePrenda_prendaId_fraseId_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "mensajePrenda_prendaId_fraseId_key",
+          "public",
+          "\"public\".\"mensajePrenda\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.prenda.prenda_token_key",
+    "label": "Add unique constraint on \"prenda\" (token)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "prenda_token_key",
+        "table": "prenda"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"prenda_token_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "prenda_token_key",
+          "public",
+          "\"public\".\"prenda\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"prenda_token_key\"",
+        "sql": "ALTER TABLE \"public\".\"prenda\" ADD CONSTRAINT \"prenda_token_key\" UNIQUE (\"token\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"prenda_token_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "prenda_token_key",
+          "public",
+          "\"public\".\"prenda\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.referido.referido_codigoReferido_key",
+    "label": "Add unique constraint on \"referido\" (codigoReferido)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "referido_codigoReferido_key",
+        "table": "referido"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"referido_codigoReferido_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "referido_codigoReferido_key",
+          "public",
+          "\"public\".\"referido\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"referido_codigoReferido_key\"",
+        "sql": "ALTER TABLE \"public\".\"referido\" ADD CONSTRAINT \"referido_codigoReferido_key\" UNIQUE (\"codigoReferido\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"referido_codigoReferido_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "referido_codigoReferido_key",
+          "public",
+          "\"public\".\"referido\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.frase.frase_activa_idx_dadcaf98",
+    "label": "Create index \"frase_activa_idx_dadcaf98\" on \"frase\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "frase_activa_idx_dadcaf98",
+        "table": "frase"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"frase_activa_idx_dadcaf98\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"frase_activa_idx_dadcaf98\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"frase_activa_idx_dadcaf98\"",
+        "sql": "CREATE INDEX \"frase_activa_idx_dadcaf98\" ON \"public\".\"frase\" (\"activa\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"frase_activa_idx_dadcaf98\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"frase_activa_idx_dadcaf98\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.mensajePrenda.mensajePrenda_fraseId_idx_a7146fb5",
+    "label": "Create index \"mensajePrenda_fraseId_idx_a7146fb5\" on \"mensajePrenda\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "mensajePrenda_fraseId_idx_a7146fb5",
+        "table": "mensajePrenda"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"mensajePrenda_fraseId_idx_a7146fb5\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"mensajePrenda_fraseId_idx_a7146fb5\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"mensajePrenda_fraseId_idx_a7146fb5\"",
+        "sql": "CREATE INDEX \"mensajePrenda_fraseId_idx_a7146fb5\" ON \"public\".\"mensajePrenda\" (\"fraseId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"mensajePrenda_fraseId_idx_a7146fb5\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"mensajePrenda_fraseId_idx_a7146fb5\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.mensajePrenda.mensajePrenda_prendaId_idx_3c4934dc",
+    "label": "Create index \"mensajePrenda_prendaId_idx_3c4934dc\" on \"mensajePrenda\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "mensajePrenda_prendaId_idx_3c4934dc",
+        "table": "mensajePrenda"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"mensajePrenda_prendaId_idx_3c4934dc\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"mensajePrenda_prendaId_idx_3c4934dc\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"mensajePrenda_prendaId_idx_3c4934dc\"",
+        "sql": "CREATE INDEX \"mensajePrenda_prendaId_idx_3c4934dc\" ON \"public\".\"mensajePrenda\" (\"prendaId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"mensajePrenda_prendaId_idx_3c4934dc\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"mensajePrenda_prendaId_idx_3c4934dc\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.prenda.prenda_contactoWhatsappId_idx_b23b26c5",
+    "label": "Create index \"prenda_contactoWhatsappId_idx_b23b26c5\" on \"prenda\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "prenda_contactoWhatsappId_idx_b23b26c5",
+        "table": "prenda"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"prenda_contactoWhatsappId_idx_b23b26c5\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"prenda_contactoWhatsappId_idx_b23b26c5\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"prenda_contactoWhatsappId_idx_b23b26c5\"",
+        "sql": "CREATE INDEX \"prenda_contactoWhatsappId_idx_b23b26c5\" ON \"public\".\"prenda\" (\"contactoWhatsappId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"prenda_contactoWhatsappId_idx_b23b26c5\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"prenda_contactoWhatsappId_idx_b23b26c5\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.referido.referido_prendaOrigenId_idx_b24f10d5",
+    "label": "Create index \"referido_prendaOrigenId_idx_b24f10d5\" on \"referido\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "referido_prendaOrigenId_idx_b24f10d5",
+        "table": "referido"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"referido_prendaOrigenId_idx_b24f10d5\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"referido_prendaOrigenId_idx_b24f10d5\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"referido_prendaOrigenId_idx_b24f10d5\"",
+        "sql": "CREATE INDEX \"referido_prendaOrigenId_idx_b24f10d5\" ON \"public\".\"referido\" (\"prendaOrigenId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"referido_prendaOrigenId_idx_b24f10d5\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"referido_prendaOrigenId_idx_b24f10d5\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.mensajePrenda.mensajePrenda_prendaId_fkey",
+    "label": "Add foreign key \"mensajePrenda_prendaId_fkey\" on \"mensajePrenda\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "mensajePrenda_prendaId_fkey",
+        "table": "mensajePrenda"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"mensajePrenda_prendaId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "mensajePrenda_prendaId_fkey",
+          "public",
+          "\"public\".\"mensajePrenda\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"mensajePrenda_prendaId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"mensajePrenda\"\nADD CONSTRAINT \"mensajePrenda_prendaId_fkey\"\nFOREIGN KEY (\"prendaId\")\nREFERENCES \"public\".\"prenda\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"mensajePrenda_prendaId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "mensajePrenda_prendaId_fkey",
+          "public",
+          "\"public\".\"mensajePrenda\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.mensajePrenda.mensajePrenda_fraseId_fkey",
+    "label": "Add foreign key \"mensajePrenda_fraseId_fkey\" on \"mensajePrenda\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "mensajePrenda_fraseId_fkey",
+        "table": "mensajePrenda"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"mensajePrenda_fraseId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "mensajePrenda_fraseId_fkey",
+          "public",
+          "\"public\".\"mensajePrenda\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"mensajePrenda_fraseId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"mensajePrenda\"\nADD CONSTRAINT \"mensajePrenda_fraseId_fkey\"\nFOREIGN KEY (\"fraseId\")\nREFERENCES \"public\".\"frase\" (\"id\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"mensajePrenda_fraseId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "mensajePrenda_fraseId_fkey",
+          "public",
+          "\"public\".\"mensajePrenda\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.prenda.prenda_contactoWhatsappId_fkey",
+    "label": "Add foreign key \"prenda_contactoWhatsappId_fkey\" on \"prenda\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "prenda_contactoWhatsappId_fkey",
+        "table": "prenda"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"prenda_contactoWhatsappId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "prenda_contactoWhatsappId_fkey",
+          "public",
+          "\"public\".\"prenda\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"prenda_contactoWhatsappId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"prenda\"\nADD CONSTRAINT \"prenda_contactoWhatsappId_fkey\"\nFOREIGN KEY (\"contactoWhatsappId\")\nREFERENCES \"public\".\"contactoWhatsapp\" (\"id\")\nON DELETE SET NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"prenda_contactoWhatsappId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "prenda_contactoWhatsappId_fkey",
+          "public",
+          "\"public\".\"prenda\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.referido.referido_prendaOrigenId_fkey",
+    "label": "Add foreign key \"referido_prendaOrigenId_fkey\" on \"referido\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "referido_prendaOrigenId_fkey",
+        "table": "referido"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"referido_prendaOrigenId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "referido_prendaOrigenId_fkey",
+          "public",
+          "\"public\".\"referido\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"referido_prendaOrigenId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"referido\"\nADD CONSTRAINT \"referido_prendaOrigenId_fkey\"\nFOREIGN KEY (\"prendaOrigenId\")\nREFERENCES \"public\".\"prenda\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"referido_prendaOrigenId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "referido_prendaOrigenId_fkey",
+          "public",
+          "\"public\".\"referido\""
+        ]
+      }
+    ]
+  }
+]

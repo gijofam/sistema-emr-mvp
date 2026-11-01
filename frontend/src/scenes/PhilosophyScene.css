@@ -1,0 +1,55 @@
+.scene--philosophy .philosophy-copy { display: grid; }
+.philosophy-copy__space,
+.philosophy-copy__visible { grid-area: 1 / 1; }
+.philosophy-copy__space { visibility: hidden; }
+
+.philosophy-stages {
+  min-height: 84px;
+  display: grid;
+  place-items: center;
+  font-family: Georgia, serif;
+  font-size: clamp(28px, 8vw, 46px);
+  letter-spacing: .06em;
+}
+.philosophy-stages span { grid-area: 1 / 1; opacity: 0; }
+.philosophy-stages span:first-child {
+  color: #000;
+  -webkit-text-stroke: 1px #efefec;
+  text-shadow: 0 0 8px rgba(255,255,255,.12);
+}
+.philosophy-stages span:nth-child(2) { color: #5f86b5; }
+.philosophy-stages span:nth-child(3) { color: #3d4221; }
+.philosophy-stages--playing span {
+  animation: philosophy-stage-word 9s ease infinite;
+}
+.philosophy-stages--playing span:nth-child(2) { animation-delay: 3s; }
+.philosophy-stages--playing span:nth-child(3) { animation-delay: 6s; }
+
+.philosophy-action { visibility: hidden; }
+.philosophy-action--ready {
+  visibility: visible;
+  animation: philosophy-button-in 1600ms cubic-bezier(.42,0,.2,1) both;
+}
+
+@keyframes philosophy-stage-word {
+  0% { opacity: 0; transform: translateY(8px); }
+  10%, 25% { opacity: 1; transform: translateY(0); }
+  33.333%, 100% { opacity: 0; transform: translateY(-8px); }
+}
+@keyframes philosophy-button-in {
+  from { opacity: 0; transform: translateY(10px); filter: blur(3px); }
+  50% { opacity: .35; }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .philosophy-stages--playing {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    font-size: clamp(18px, 5vw, 28px);
+  }
+  .philosophy-stages--playing span { opacity: 1; animation: none; }
+  .philosophy-action--ready { animation: none; }
+}

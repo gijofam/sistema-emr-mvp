@@ -1,0 +1,33 @@
+{
+  "name": "backend",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "EMR garment experience API",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "check": "node --check src/server.js",
+    "test": "node --test",
+    "seed": "node src/seed.js",
+    "postinstall": "prisma skills sync || exit 0",
+    "contract:emit": "prisma contract emit",
+    "migration:plan": "prisma migration plan",
+    "migration:apply": "prisma db migrate"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^7.10.0",
+    "@prisma/orm-postgres": "^8.0.0-rc.11",
+    "dotenv": "^18.0.1",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@prisma/cli-engine": "^0.4.0",
+    "@types/node": "^26.6.2",
+    "nodemon": "^3.1.14",
+    "prisma": "^8.0.0-rc.15"
+  }
+}

@@ -1,0 +1,100 @@
+// use prisma-8
+
+enum EtapaEmr {
+  QUIEBRE
+  RENACER
+  EVOLUCION
+}
+
+enum EstadoPrenda {
+  GENERADA
+  ACTIVA
+  COMPLETADA
+  INACTIVA
+}
+
+enum CategoriaFrase {
+  DISCIPLINA
+  QUIEBRE
+  RENACER
+  EVOLUCION
+  FORTALEZA_MENTAL
+  RESILIENCIA
+  PROPOSITO
+  CONSTANCIA
+  ENTRENAMIENTO
+  MENTALIDAD
+  PACIENCIA
+  SUPERACION
+}
+
+enum EstadoReferido {
+  PENDIENTE
+  CONVERTIDO
+}
+
+model Prenda {
+  id                 Int               @id @default(autoincrement())
+  token              String            @unique
+  tipoPrenda         String
+  etapaEmr           EtapaEmr
+  estado             EstadoPrenda      @default(GENERADA)
+  fechaCreacion      TimestamptzString @default(now())
+  fechaActivacion    TimestamptzString?
+  contactoWhatsappId Int?
+  contactoWhatsapp   ContactoWhatsapp? @relation(fields: [contactoWhatsappId], references: [id], onDelete: SetNull)
+  mensajes           MensajePrenda[]
+  referidos          Referido[]
+
+  @@index([contactoWhatsappId])
+}
+
+model Frase {
+  id            Int               @id @default(autoincrement())
+  codigo        Int               @unique
+  texto         String
+  categoria     CategoriaFrase
+  activa        Boolean           @default(true)
+  vecesMostrada Int               @default(0)
+  fechaCreacion TimestamptzString @default(now())
+  mensajes      MensajePrenda[]
+
+  @@index([activa])
+  @@check(expression: "\"codigo\" > 0", name: "frase_codigo_positivo")
+  @@check(expression: "\"vecesMostrada\" >= 0", name: "frase_veces_mostrada_no_negativa")
+}
+
+model MensajePrenda {
+  id              Int               @id @default(autoincrement())
+  prendaId        Int
+  fraseId         Int
+  numeroMensaje   Int
+  fechaDesbloqueo TimestamptzString @default(now())
+  prenda          Prenda            @relation(fields: [prendaId], references: [id], onDelete: Cascade)
+  frase           Frase             @relation(fields: [fraseId], references: [id], onDelete: Restrict)
+
+  @@unique([prendaId, numeroMensaje])
+  @@unique([prendaId, fraseId])
+  @@index([fraseId])
+  @@check(expression: "\"numeroMensaje\" BETWEEN 1 AND 3", name: "mensaje_prenda_numero_valido")
+}
+
+model ContactoWhatsapp {
+  id            Int               @id @default(autoincrement())
+  numero        String            @unique
+  fechaRegistro TimestamptzString @default(now())
+  activo        Boolean           @default(true)
+  prendas       Prenda[]
+}
+
+model Referido {
+  id              Int               @id @default(autoincrement())
+  prendaOrigenId  Int
+  codigoReferido  String            @unique
+  estado          EstadoReferido    @default(PENDIENTE)
+  fechaCreacion   TimestamptzString @default(now())
+  fechaConversion TimestamptzString?
+  prendaOrigen    Prenda            @relation(fields: [prendaOrigenId], references: [id], onDelete: Cascade)
+
+  @@index([prendaOrigenId])
+}

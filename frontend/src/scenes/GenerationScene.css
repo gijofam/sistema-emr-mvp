@@ -1,0 +1,27 @@
+.scene--generation .generation-copy {
+  display: grid;
+  white-space: pre-line;
+}
+
+.generation-copy__space,
+.generation-copy__visible {
+  grid-area: 1 / 1;
+}
+
+.generation-copy__space { visibility: hidden; }
+
+.generation-action { visibility: hidden; }
+.generation-action--ready {
+  visibility: visible;
+  animation: generation-button-in 1600ms cubic-bezier(.42,0,.2,1) both;
+}
+
+@keyframes generation-button-in {
+  from { opacity: 0; transform: translateY(10px); filter: blur(3px); }
+  50% { opacity: .35; }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .generation-action--ready { animation: none; }
+}

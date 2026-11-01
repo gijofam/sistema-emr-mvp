@@ -1,0 +1,40 @@
+.scene--message .message-copy { display: grid; }
+.message-copy__space,
+.message-copy__visible { grid-area: 1 / 1; }
+.message-copy__space { visibility: hidden; }
+
+.scene--message .message-signature { color: #afb5af; }
+.message-signature--shine .message-copy__visible {
+  color: transparent;
+  background-image: linear-gradient(110deg, #afb5af 35%, #fff 49%, #afb5af 63%);
+  background-size: 300% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: message-signature-light 2200ms ease-in-out both;
+}
+.message-action { margin-top: 2vh; visibility: hidden; }
+.message-action--ready {
+  visibility: visible;
+  animation: message-button-in 1600ms cubic-bezier(.42,0,.2,1) both;
+}
+
+@keyframes message-signature-light {
+  0% { background-position: 100% 0; text-shadow: 0 0 0 transparent; }
+  50% { text-shadow: 0 0 8px rgba(255,255,255,.35); }
+  100% { background-position: 0% 0; text-shadow: 0 0 0 transparent; }
+}
+@keyframes message-button-in {
+  from { opacity: 0; transform: translateY(10px); filter: blur(3px); }
+  50% { opacity: .35; }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .message-signature--shine .message-copy__visible {
+    color: inherit;
+    background: none;
+    animation: none;
+  }
+  .message-action--ready { animation: none; }
+}

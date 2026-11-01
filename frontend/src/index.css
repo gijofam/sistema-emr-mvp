@@ -1,0 +1,17 @@
+:root {
+  font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #f1f0ec;
+  background: #000;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  --ink: #f1f0ec;
+  --muted: #929792;
+  --line: rgba(255, 255, 255, 0.14);
+  --accent: #819687;
+}
+
+* { box-sizing: border-box; }
+html, body, #root { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #000; }
+button, input { font: inherit; }
+button { -webkit-tap-highlight-color: transparent; }
