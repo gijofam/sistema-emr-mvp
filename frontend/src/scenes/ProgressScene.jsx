@@ -4,22 +4,26 @@ import { useCountdown } from '../hooks/useCountdown'
 import './NarrativeSequence.css'
 
 const QUIET_COPY = 'Porque un mensaje que vale la pena no se consume.\n'
-const makeSteps = (completed) => [
-  { text: completed ? 'RECORRIDO COMPLETADO' : 'ESTE FUE SOLO EL PRIMERO.', characterMs: 75 },
+const makeSteps = (completed, demo = false) => [
+  { text: completed ? 'RECORRIDO COMPLETADO' : demo ? 'ESTE ES TU MENSAJE DE MUESTRA.' : 'ESTE FUE SOLO EL PRIMERO.', characterMs: 75 },
   { text: 'TU PRENDA EMR', characterMs: 100 },
   { pauseMs: 1400 },
-  { text: completed ? 'Los tres mensajes ya forman parte de tu camino.' : 'Esta prenda contiene 3 mensajes EMR.\nEl siguiente estará disponible mañana.' },
+  { text: completed ? (demo ? 'La próxima vez volverás al primer mensaje.' : 'Los tres mensajes ya forman parte de tu camino.') : demo ? 'Esta demostración recorre 3 mensajes EMR.\nAbre el enlace otra vez para ver el siguiente.' : 'Esta prenda contiene 3 mensajes EMR.\nEl siguiente estará disponible mañana.' },
   { pauseMs: completed ? 0 : 1600 },
   { text: completed ? '' : `${QUIET_COPY}Se aplica.`, pauseMs: 1000 },
   { pauseMs: 1600 },
 ]
 const ACTIVE_STEPS = makeSteps(false)
 const COMPLETED_STEPS = makeSteps(true)
+const DEMO_ACTIVE_STEPS = makeSteps(false, true)
+const DEMO_COMPLETED_STEPS = makeSteps(true, true)
 
-export function ProgressScene({ data, onContinue }) {
+export function ProgressScene({ data, demo = false, onContinue }) {
   const countdown = useCountdown(data.nextAvailableAt, data.serverTime)
   const completed = data.mensajesDesbloqueados >= 3
-  const steps = completed ? COMPLETED_STEPS : ACTIVE_STEPS
+  const steps = demo
+    ? completed ? DEMO_COMPLETED_STEPS : DEMO_ACTIVE_STEPS
+    : completed ? COMPLETED_STEPS : ACTIVE_STEPS
   const sequence = useNarrativeSequence(steps)
   return (
     <SceneFrame className="scene--progress">

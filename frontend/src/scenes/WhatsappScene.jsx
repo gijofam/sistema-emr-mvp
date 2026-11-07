@@ -12,9 +12,13 @@ const STEPS = [
   { pauseMs: 1800 },
   { pauseMs: 1600 },
 ]
+const DEMO_STEPS = STEPS.map((step, index) => index === 2
+  ? { ...step, text: 'Esta es una demostración. Tu número no se guardará; puedes continuar sin ingresarlo.' }
+  : step)
 
-export function WhatsappScene({ token, onContinue }) {
-  const sequence = useNarrativeSequence(STEPS)
+export function WhatsappScene({ token, demo = false, onContinue }) {
+  const steps = demo ? DEMO_STEPS : STEPS
+  const sequence = useNarrativeSequence(steps)
   const [numero, setNumero] = useState('')
   const [status, setStatus] = useState('idle')
   const [message, setMessage] = useState('')
@@ -29,9 +33,9 @@ export function WhatsappScene({ token, onContinue }) {
     }
     setStatus('saving')
     try {
-      await api.saveWhatsapp(token, numero)
+      if (!demo) await api.saveWhatsapp(token, numero)
       setStatus('saved')
-      setMessage('Tu progreso quedó vinculado a este número.')
+      setMessage(demo ? 'Demostración: no se guardó tu número.' : 'Tu progreso quedó vinculado a este número.')
       continueTimer.current = window.setTimeout(onContinue, 4000)
     } catch (error) {
       setStatus('error')
@@ -41,9 +45,9 @@ export function WhatsappScene({ token, onContinue }) {
 
   return (
     <SceneFrame className="scene--whatsapp">
-      <span className="eyebrow narrative-typed" data-text={STEPS[0].text} aria-label={STEPS[0].text}><span aria-hidden="true">{sequence.text(0)}</span></span>
-      <h1 className="narrative-typed" data-text={STEPS[1].text} aria-label={STEPS[1].text}><span aria-hidden="true">{sequence.text(1)}</span></h1>
-        <p className="narrative-typed" data-text={STEPS[2].text} aria-label={STEPS[2].text}><span aria-hidden="true">{sequence.text(2)}</span></p>
+      <span className="eyebrow narrative-typed" data-text={steps[0].text} aria-label={steps[0].text}><span aria-hidden="true">{sequence.text(0)}</span></span>
+      <h1 className="narrative-typed" data-text={steps[1].text} aria-label={steps[1].text}><span aria-hidden="true">{sequence.text(1)}</span></h1>
+        <p className="narrative-typed" data-text={steps[2].text} aria-label={steps[2].text}><span aria-hidden="true">{sequence.text(2)}</span></p>
         <form onSubmit={submit} noValidate>
           <div className={sequence.visible(3) ? 'whatsapp-fields narrative-block-enter' : 'whatsapp-fields narrative-hidden'}>
           <label htmlFor="whatsapp">Número de WhatsApp</label>

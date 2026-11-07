@@ -24,9 +24,9 @@ const readToken = () => {
   return match?.[1]?.toUpperCase() || null
 }
 
-function GarmentExperience() {
-  const [token] = useState(() => readToken())
-  const experience = useExperience(token)
+function GarmentExperience({ demo = false }) {
+  const [token] = useState(() => demo ? null : readToken())
+  const experience = useExperience(token, demo)
   const [scene, setScene] = useState(0)
   const [message, setMessage] = useState(null)
   const [sceneError, setSceneError] = useState(null)
@@ -66,10 +66,10 @@ function GarmentExperience() {
     <DecisionScene onContinue={next} />,
     <ReflectionScene onContinue={next} />,
     message && <ShareScene message={message} onContinue={next} />,
-    <ProgressScene data={experience.data} onContinue={next} />,
-    <WhatsappScene token={token} onContinue={next} />,
+    <ProgressScene data={experience.data} demo={demo} onContinue={next} />,
+    <WhatsappScene token={token} demo={demo} onContinue={next} />,
     <CommunityScene onContinue={next} />,
-    <ReferralScene token={token} onContinue={next} />,
+    <ReferralScene token={token} demo={demo} onContinue={next} />,
     <ClosingScene />,
   ]
 
@@ -83,6 +83,7 @@ function GarmentExperience() {
 
 export default function App() {
   const pathname = window.location.pathname
+  if (/^\/demo\/?$/.test(pathname)) return <GarmentExperience demo />
   if (pathname === '/r' || pathname.startsWith('/r/')) {
     const match = pathname.match(/^\/r\/([^/]+)\/?$/)
     return <ReferralExperience code={match?.[1] || ''} />
