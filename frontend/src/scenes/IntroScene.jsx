@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { ContinueButton, SceneFrame } from '../components/SceneFrame'
-import logoAnimation from '../assets/images/emr_logo_reconstruction_once.gif'
+import logoAnimation from '../assets/images/emr_logo_reconstruction_transparent.gif'
 import './IntroScene.css'
 
 const FIRST_LINE = 'No todos llegan hasta aquí.'

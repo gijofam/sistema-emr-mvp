@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { ContinueButton, SceneFrame } from '../components/SceneFrame'
+import { BRAND } from '../config/brand'
 import { api } from '../services/api'
 import './ReferralScene.css'
 
@@ -65,7 +66,8 @@ export function ReferralScene({ token, onContinue }) {
     try {
       const result = await api.createReferral(token)
       setReferral(result)
-      const url = `${window.location.origin}/c/${token}?ref=${result.codigoReferido}`
+      const siteUrl = import.meta.env.DEV ? window.location.origin : BRAND.siteUrl
+      const url = new URL(`/r/${encodeURIComponent(result.codigoReferido)}`, siteUrl).href
       if (navigator.share) {
         try {
           await navigator.share({ title: 'Comienza tu camino EMR', text: 'Alguien más podría necesitar comenzar.', url })

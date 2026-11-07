@@ -1,5 +1,5 @@
 const parseOrigins = (value) =>
-  (value || 'http://localhost:5173,http://127.0.0.1:5173')
+  (value || 'http://localhost:5173,http://127.0.0.1:5173,https://elmachorenace.com')
     .split(',')
     .map((origin) => origin.trim())
     .filter(Boolean)

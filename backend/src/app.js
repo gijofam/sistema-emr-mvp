@@ -2,6 +2,7 @@ import express from 'express'
 import { config } from './config.js'
 import { AppError } from './errors.js'
 import { prendasRouter } from './routes/prendas.js'
+import { referidosRouter } from './routes/referidos.js'
 
 export const app = express()
 app.disable('x-powered-by')
@@ -20,6 +21,7 @@ app.use((req, res, next) => {
 
 app.get('/api/v1/health', (_req, res) => res.json({ status: 'ok' }))
 app.use('/api/v1/prendas', prendasRouter)
+app.use('/api/v1/referidos', referidosRouter)
 app.use((_req, res) => res.status(404).json({
   code: 'RUTA_NO_ENCONTRADA',
   message: 'La experiencia solicitada no está disponible.',

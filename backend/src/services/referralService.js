@@ -1,6 +1,12 @@
 import { randomBytes } from 'node:crypto'
 import { db } from '../prisma/db.ts'
-import { notFound } from '../errors.js'
+import { AppError, notFound } from '../errors.js'
+
+export const getPublicReferral = async (codigoReferido, client = db) => {
+  const referral = await client.orm.public.Referido.where({ codigoReferido }).first()
+  if (!referral) throw new AppError(404, 'INVITACION_NO_DISPONIBLE', 'Esta invitación EMR no está disponible.')
+  return { codigoReferido: referral.codigoReferido, valido: true }
+}
 
 const referralState = (referrals) => {
   const conversions = referrals.filter((item) => item.estado === 'CONVERTIDO').length

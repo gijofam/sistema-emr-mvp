@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 
-export function useNarrativeSequence(steps) {
+export function useNarrativeSequence(steps, { enabled = true, startDelayMs = 400 } = {}) {
   const [progress, setProgress] = useState({ block: -1, length: 0 })
   useEffect(() => {
+    if (!enabled) return undefined
     let timer
     const schedule = (callback, delay) => { timer = window.setTimeout(callback, delay) }
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -27,10 +28,10 @@ export function useNarrativeSequence(steps) {
         if (steps[block].text) schedule(typeNext, steps[block].characterMs ?? 80)
         else schedule(advance, steps[block].pauseMs ?? 1600)
       }
-      schedule(start, 400)
+      schedule(start, startDelayMs)
     }
     return () => window.clearTimeout(timer)
-  }, [steps])
+  }, [steps, enabled, startDelayMs])
   return {
     text: (index) => progress.block > index ? steps[index].text : progress.block === index ? (steps[index].text || '').slice(0, progress.length) : '',
     visible: (index) => progress.block >= index,

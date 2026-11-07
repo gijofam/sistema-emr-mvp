@@ -33,10 +33,6 @@
             "codecId": "pg/text@1",
             "members": [
               {
-                "name": "DISCIPLINA",
-                "value": "DISCIPLINA"
-              },
-              {
                 "name": "QUIEBRE",
                 "value": "QUIEBRE"
               },
@@ -49,36 +45,32 @@
                 "value": "EVOLUCION"
               },
               {
-                "name": "FORTALEZA_MENTAL",
-                "value": "FORTALEZA_MENTAL"
-              },
-              {
-                "name": "RESILIENCIA",
-                "value": "RESILIENCIA"
-              },
-              {
-                "name": "PROPOSITO",
-                "value": "PROPOSITO"
+                "name": "DISCIPLINA",
+                "value": "DISCIPLINA"
               },
               {
                 "name": "CONSTANCIA",
                 "value": "CONSTANCIA"
               },
               {
-                "name": "ENTRENAMIENTO",
-                "value": "ENTRENAMIENTO"
+                "name": "RESILIENCIA",
+                "value": "RESILIENCIA"
               },
               {
-                "name": "MENTALIDAD",
-                "value": "MENTALIDAD"
+                "name": "FORTALEZA_MENTAL",
+                "value": "FORTALEZA_MENTAL"
               },
               {
-                "name": "PACIENCIA",
-                "value": "PACIENCIA"
+                "name": "PROPOSITO",
+                "value": "PROPOSITO"
               },
               {
-                "name": "SUPERACION",
-                "value": "SUPERACION"
+                "name": "IDENTIDAD",
+                "value": "IDENTIDAD"
+              },
+              {
+                "name": "AUTODOMINIO",
+                "value": "AUTODOMINIO"
               }
             ]
           },
@@ -705,8 +697,8 @@
             "frase": {
               "checks": [
                 {
-                  "expression": "\"categoria\" IN ('DISCIPLINA', 'QUIEBRE', 'RENACER', 'EVOLUCION', 'FORTALEZA_MENTAL', 'RESILIENCIA', 'PROPOSITO', 'CONSTANCIA', 'ENTRENAMIENTO', 'MENTALIDAD', 'PACIENCIA', 'SUPERACION')",
-                  "name": "frase_categoria_check_2c70cf02",
+                  "expression": "\"categoria\" IN ('QUIEBRE', 'RENACER', 'EVOLUCION', 'DISCIPLINA', 'CONSTANCIA', 'RESILIENCIA', 'FORTALEZA_MENTAL', 'PROPOSITO', 'IDENTIDAD', 'AUTODOMINIO')",
+                  "name": "frase_categoria_check_96fea824",
                   "prefix": "frase_categoria_check"
                 },
                 {
@@ -1146,18 +1138,16 @@
             "CategoriaFrase": {
               "kind": "valueSet",
               "values": [
-                "DISCIPLINA",
                 "QUIEBRE",
                 "RENACER",
                 "EVOLUCION",
-                "FORTALEZA_MENTAL",
-                "RESILIENCIA",
-                "PROPOSITO",
+                "DISCIPLINA",
                 "CONSTANCIA",
-                "ENTRENAMIENTO",
-                "MENTALIDAD",
-                "PACIENCIA",
-                "SUPERACION"
+                "RESILIENCIA",
+                "FORTALEZA_MENTAL",
+                "PROPOSITO",
+                "IDENTIDAD",
+                "AUTODOMINIO"
               ]
             },
             "EstadoPrenda": {
@@ -1190,7 +1180,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "14821b37ed357192fd6e56ff6644e079a011fd0eaeaf69477554b02c9089b18c"
+    "storageHash": "a46586418c7242df109fad0729ca7ef0e3bfec9a3a33557d93d0d057d5bbc4fc"
   },
   "capabilities": {
     "postgres": {

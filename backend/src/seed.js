@@ -1,34 +1,54 @@
 import 'dotenv/config'
-import { db } from './prisma/db.ts'
+import { resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { frases } from './data/frases.js'
+import { validateFrases } from './scripts/validatePhrases.js'
 
-const phrases = [
-  [84, 'No necesitas volver a empezar. Necesitas dejar de abandonar.', 'DISCIPLINA'],
-  [17, 'La calma también es una forma de fortaleza.', 'FORTALEZA_MENTAL'],
-  [31, 'Lo que hoy pesa, mañana será parte de tu carácter.', 'RESILIENCIA'],
-  [46, 'Avanzar lento sigue siendo avanzar.', 'CONSTANCIA'],
-  [59, 'Tu propósito se demuestra en lo que haces cuando nadie mira.', 'PROPOSITO'],
-  [72, 'No eres el momento en que caíste. Eres la decisión de levantarte.', 'RENACER'],
-  [93, 'La evolución comienza cuando dejas de negociar con tu disciplina.', 'EVOLUCION'],
-  [108, 'El quiebre no fue el final. Fue el lugar donde elegiste cambiar.', 'QUIEBRE'],
-]
+export async function seedFrases(database) {
+  validateFrases()
+  return database.transaction(async (tx) => {
+    const existingCodes = new Set()
+    const conflicts = []
+    for (const phrase of frases) {
+      const existing = await tx.orm.public.Frase.where({ codigo: phrase.codigo }).first()
+      if (!existing) continue
+      existingCodes.add(phrase.codigo)
+      if (existing.texto !== phrase.texto || existing.categoria !== phrase.categoria || existing.activa !== true) {
+        conflicts.push(phrase.codigo)
+      }
+    }
+    if (conflicts.length) {
+      throw new Error(`Seed detenido sin insertar frases. Códigos existentes con datos distintos: ${conflicts.join(', ')}. Revísalos manualmente; no se modificó ningún registro.`)
+    }
+    let inserted = 0
+    for (const phrase of frases) {
+      if (!existingCodes.has(phrase.codigo)) {
+        await tx.orm.public.Frase.create(phrase)
+        inserted++
+      }
+    }
+    return inserted
+  })
+}
 
-try {
-  for (const [codigo, texto, categoria] of phrases) {
-    if (!await db.orm.public.Frase.where({ codigo }).first()) {
-      await db.orm.public.Frase.create({ codigo, texto, categoria, activa: true })
+if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1])) {
+  const { db } = await import('./prisma/db.ts')
+  try {
+    const inserted = await seedFrases(db)
+    if (process.env.SEED_DEVELOPMENT_GARMENTS === 'true') {
+      const developmentGarments = [
+        { token: 'A81KX9', tipoPrenda: 'POLO' },
+        { token: 'PRF-F6A2K4', tipoPrenda: 'POLO_REGULAR_FIT' },
+        { token: 'MC-CB83E6', tipoPrenda: 'MANGA_CERO' },
+      ]
+      for (const garment of developmentGarments) {
+        if (!await db.orm.public.Prenda.where({ token: garment.token }).first()) {
+          await db.orm.public.Prenda.create({ ...garment, etapaEmr: 'RENACER', estado: 'GENERADA' })
+        }
+      }
     }
+    console.log(`Seed EMR completado: 500 frases oficiales verificadas; ${inserted} insertadas.`)
+  } finally {
+    await db.close()
   }
-  const developmentGarments = [
-    { token: 'A81KX9', tipoPrenda: 'POLO' },
-    { token: 'PRF-F6A2K4', tipoPrenda: 'POLO_REGULAR_FIT' },
-    { token: 'MC-CB83E6', tipoPrenda: 'MANGA_CERO' },
-  ]
-  for (const garment of developmentGarments) {
-    if (!await db.orm.public.Prenda.where({ token: garment.token }).first()) {
-      await db.orm.public.Prenda.create({ ...garment, etapaEmr: 'RENACER', estado: 'GENERADA' })
-    }
-  }
-  console.log(`Seed EMR completado. Tokens de desarrollo: ${developmentGarments.map(({ token }) => token).join(', ')}`)
-} finally {
-  await db.close()
 }

@@ -1,5 +1,13 @@
 import { AppError } from './errors.js'
 
+export const normalizeReferralCode = (value) => {
+  const code = String(value || '').trim().toUpperCase()
+  if (!/^EMR-[A-F0-9]{8}$/.test(code)) {
+    throw new AppError(400, 'REFERIDO_INVALIDO', 'La invitación EMR no es válida.')
+  }
+  return code
+}
+
 export const normalizeToken = (value) => {
   const token = String(value || '').trim().toUpperCase()
   if (!/^[A-Z0-9](?:[A-Z0-9-]{4,30}[A-Z0-9])$/.test(token)) {

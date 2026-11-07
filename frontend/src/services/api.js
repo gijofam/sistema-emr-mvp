@@ -1,4 +1,4 @@
-const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000/api/v1').replace(/\/$/, '')
+const API_URL = (import.meta.env.MODE === 'https' ? '/api/v1' : (import.meta.env.VITE_API_URL || 'http://localhost:3000/api/v1')).replace(/\/$/, '')
 
 export class ApiError extends Error {
   constructor(status, payload) {
@@ -27,6 +27,7 @@ const request = async (path, options = {}) => {
 const garmentPath = (token) => `/prendas/${encodeURIComponent(token)}`
 
 export const api = {
+  getPublicReferral: (code) => request(`/referidos/${encodeURIComponent(code)}`),
   getMessages: (token) => request(`${garmentPath(token)}/mensajes`),
   unlockMessage: (token) => request(`${garmentPath(token)}/mensajes/desbloquear`, { method: 'POST' }),
   saveWhatsapp: (token, numero) => request(`${garmentPath(token)}/whatsapp`, {

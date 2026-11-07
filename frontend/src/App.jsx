@@ -17,13 +17,14 @@ import { ReflectionScene } from './scenes/ReflectionScene'
 import { ReferralScene } from './scenes/ReferralScene'
 import { ShareScene } from './scenes/ShareScene'
 import { WhatsappScene } from './scenes/WhatsappScene'
+import { ReferralExperience } from './referral/ReferralExperience'
 
 const readToken = () => {
   const match = window.location.pathname.match(/^\/c\/([A-Za-z0-9](?:[A-Za-z0-9-]{4,30}[A-Za-z0-9]))\/?$/)
   return match?.[1]?.toUpperCase() || null
 }
 
-function App() {
+function GarmentExperience() {
   const [token] = useState(() => readToken())
   const experience = useExperience(token)
   const [scene, setScene] = useState(0)
@@ -80,4 +81,11 @@ function App() {
   )
 }
 
-export default App
+export default function App() {
+  const pathname = window.location.pathname
+  if (pathname === '/r' || pathname.startsWith('/r/')) {
+    const match = pathname.match(/^\/r\/([^/]+)\/?$/)
+    return <ReferralExperience code={match?.[1] || ''} />
+  }
+  return <GarmentExperience />
+}

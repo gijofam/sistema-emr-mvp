@@ -1,0 +1,86 @@
+[
+  {
+    "id": "dropCheckConstraint.frase.frase_categoria_check_8b0a510f",
+    "label": "Drop check constraint \"frase_categoria_check_8b0a510f\" on \"frase\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "checkConstraint",
+        "name": "frase_categoria_check_8b0a510f",
+        "table": "frase"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"frase_categoria_check_8b0a510f\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "frase_categoria_check_8b0a510f",
+          "public",
+          "\"public\".\"frase\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop check constraint \"frase_categoria_check_8b0a510f\"",
+        "sql": "ALTER TABLE \"public\".\"frase\" DROP CONSTRAINT \"frase_categoria_check_8b0a510f\""
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"frase_categoria_check_8b0a510f\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "frase_categoria_check_8b0a510f",
+          "public",
+          "\"public\".\"frase\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "checkConstraint.frase.frase_categoria_check_96fea824",
+    "label": "Add check constraint \"frase_categoria_check_96fea824\" on \"frase\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "checkConstraint",
+        "name": "frase_categoria_check_96fea824",
+        "table": "frase"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"frase_categoria_check_96fea824\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "frase_categoria_check_96fea824",
+          "public",
+          "\"public\".\"frase\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add check constraint \"frase_categoria_check_96fea824\"",
+        "sql": "ALTER TABLE \"public\".\"frase\" ADD CONSTRAINT \"frase_categoria_check_96fea824\" CHECK (\"categoria\" IN ('QUIEBRE', 'RENACER', 'EVOLUCION', 'DISCIPLINA', 'CONSTANCIA', 'RESILIENCIA', 'FORTALEZA_MENTAL', 'PROPOSITO', 'IDENTIDAD', 'AUTODOMINIO'))"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"frase_categoria_check_96fea824\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "frase_categoria_check_96fea824",
+          "public",
+          "\"public\".\"frase\""
+        ]
+      }
+    ]
+  }
+]

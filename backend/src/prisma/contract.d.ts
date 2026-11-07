@@ -34,7 +34,7 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'14821b37ed357192fd6e56ff6644e079a011fd0eaeaf69477554b02c9089b18c'>;
+  StorageHashBase<'a46586418c7242df109fad0729ca7ef0e3bfec9a3a33557d93d0d057d5bbc4fc'>;
 export type ExecutionHash = ExecutionHashBase<string>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
@@ -252,18 +252,16 @@ export type FieldOutputTypes = {
       readonly codigo: CodecTypes['pg/int4@1']['output'];
       readonly texto: CodecTypes['pg/text@1']['output'];
       readonly categoria:
-        | 'DISCIPLINA'
         | 'QUIEBRE'
         | 'RENACER'
         | 'EVOLUCION'
-        | 'FORTALEZA_MENTAL'
-        | 'RESILIENCIA'
-        | 'PROPOSITO'
+        | 'DISCIPLINA'
         | 'CONSTANCIA'
-        | 'ENTRENAMIENTO'
-        | 'MENTALIDAD'
-        | 'PACIENCIA'
-        | 'SUPERACION';
+        | 'RESILIENCIA'
+        | 'FORTALEZA_MENTAL'
+        | 'PROPOSITO'
+        | 'IDENTIDAD'
+        | 'AUTODOMINIO';
       readonly activa: CodecTypes['pg/bool@1']['output'];
       readonly vecesMostrada: CodecTypes['pg/int4@1']['output'];
       readonly fechaCreacion: CodecTypes['pg/timestamptz-string@1']['output'];
@@ -308,18 +306,16 @@ export type FieldInputTypes = {
       readonly codigo: CodecTypes['pg/int4@1']['input'];
       readonly texto: CodecTypes['pg/text@1']['input'];
       readonly categoria:
-        | 'DISCIPLINA'
         | 'QUIEBRE'
         | 'RENACER'
         | 'EVOLUCION'
-        | 'FORTALEZA_MENTAL'
-        | 'RESILIENCIA'
-        | 'PROPOSITO'
+        | 'DISCIPLINA'
         | 'CONSTANCIA'
-        | 'ENTRENAMIENTO'
-        | 'MENTALIDAD'
-        | 'PACIENCIA'
-        | 'SUPERACION';
+        | 'RESILIENCIA'
+        | 'FORTALEZA_MENTAL'
+        | 'PROPOSITO'
+        | 'IDENTIDAD'
+        | 'AUTODOMINIO';
       readonly activa: CodecTypes['pg/bool@1']['input'];
       readonly vecesMostrada: CodecTypes['pg/int4@1']['input'];
       readonly fechaCreacion: CodecTypes['pg/timestamptz-string@1']['input'];
@@ -362,18 +358,16 @@ export type StorageColumnTypes = {
     readonly frase: {
       readonly activa: CodecTypes['pg/bool@1']['output'];
       readonly categoria:
-        | 'DISCIPLINA'
         | 'QUIEBRE'
         | 'RENACER'
         | 'EVOLUCION'
-        | 'FORTALEZA_MENTAL'
-        | 'RESILIENCIA'
-        | 'PROPOSITO'
+        | 'DISCIPLINA'
         | 'CONSTANCIA'
-        | 'ENTRENAMIENTO'
-        | 'MENTALIDAD'
-        | 'PACIENCIA'
-        | 'SUPERACION';
+        | 'RESILIENCIA'
+        | 'FORTALEZA_MENTAL'
+        | 'PROPOSITO'
+        | 'IDENTIDAD'
+        | 'AUTODOMINIO';
       readonly codigo: CodecTypes['pg/int4@1']['output'];
       readonly fechaCreacion: CodecTypes['pg/timestamptz-string@1']['output'];
       readonly id: CodecTypes['pg/int4@1']['output'];
@@ -418,18 +412,16 @@ export type StorageColumnInputTypes = {
     readonly frase: {
       readonly activa: CodecTypes['pg/bool@1']['input'];
       readonly categoria:
-        | 'DISCIPLINA'
         | 'QUIEBRE'
         | 'RENACER'
         | 'EVOLUCION'
-        | 'FORTALEZA_MENTAL'
-        | 'RESILIENCIA'
-        | 'PROPOSITO'
+        | 'DISCIPLINA'
         | 'CONSTANCIA'
-        | 'ENTRENAMIENTO'
-        | 'MENTALIDAD'
-        | 'PACIENCIA'
-        | 'SUPERACION';
+        | 'RESILIENCIA'
+        | 'FORTALEZA_MENTAL'
+        | 'PROPOSITO'
+        | 'IDENTIDAD'
+        | 'AUTODOMINIO';
       readonly codigo: CodecTypes['pg/int4@1']['input'];
       readonly fechaCreacion: CodecTypes['pg/timestamptz-string@1']['input'];
       readonly id: CodecTypes['pg/int4@1']['input'];
@@ -484,18 +476,16 @@ export namespace Models {
     codigo: CodecTypes['pg/int4@1']['output'];
     texto: CodecTypes['pg/text@1']['output'];
     categoria:
-      | 'DISCIPLINA'
       | 'QUIEBRE'
       | 'RENACER'
       | 'EVOLUCION'
-      | 'FORTALEZA_MENTAL'
-      | 'RESILIENCIA'
-      | 'PROPOSITO'
+      | 'DISCIPLINA'
       | 'CONSTANCIA'
-      | 'ENTRENAMIENTO'
-      | 'MENTALIDAD'
-      | 'PACIENCIA'
-      | 'SUPERACION';
+      | 'RESILIENCIA'
+      | 'FORTALEZA_MENTAL'
+      | 'PROPOSITO'
+      | 'IDENTIDAD'
+      | 'AUTODOMINIO';
     activa: CodecTypes['pg/bool@1']['output'];
     vecesMostrada: CodecTypes['pg/int4@1']['output'];
     fechaCreacion: CodecTypes['pg/timestamptz-string@1']['output'];
@@ -888,18 +878,16 @@ type ContractBase = Omit<
             readonly CategoriaFrase: {
               readonly kind: 'valueSet';
               readonly values: readonly [
-                'DISCIPLINA',
                 'QUIEBRE',
                 'RENACER',
                 'EVOLUCION',
-                'FORTALEZA_MENTAL',
-                'RESILIENCIA',
-                'PROPOSITO',
+                'DISCIPLINA',
                 'CONSTANCIA',
-                'ENTRENAMIENTO',
-                'MENTALIDAD',
-                'PACIENCIA',
-                'SUPERACION',
+                'RESILIENCIA',
+                'FORTALEZA_MENTAL',
+                'PROPOSITO',
+                'IDENTIDAD',
+                'AUTODOMINIO',
               ];
             };
             readonly EstadoPrenda: {
@@ -1286,18 +1274,16 @@ type ContractBase = Omit<
           readonly CategoriaFrase: {
             readonly codecId: 'pg/text@1';
             readonly members: readonly [
-              { readonly name: 'DISCIPLINA'; readonly value: 'DISCIPLINA' },
               { readonly name: 'QUIEBRE'; readonly value: 'QUIEBRE' },
               { readonly name: 'RENACER'; readonly value: 'RENACER' },
               { readonly name: 'EVOLUCION'; readonly value: 'EVOLUCION' },
-              { readonly name: 'FORTALEZA_MENTAL'; readonly value: 'FORTALEZA_MENTAL' },
-              { readonly name: 'RESILIENCIA'; readonly value: 'RESILIENCIA' },
-              { readonly name: 'PROPOSITO'; readonly value: 'PROPOSITO' },
+              { readonly name: 'DISCIPLINA'; readonly value: 'DISCIPLINA' },
               { readonly name: 'CONSTANCIA'; readonly value: 'CONSTANCIA' },
-              { readonly name: 'ENTRENAMIENTO'; readonly value: 'ENTRENAMIENTO' },
-              { readonly name: 'MENTALIDAD'; readonly value: 'MENTALIDAD' },
-              { readonly name: 'PACIENCIA'; readonly value: 'PACIENCIA' },
-              { readonly name: 'SUPERACION'; readonly value: 'SUPERACION' },
+              { readonly name: 'RESILIENCIA'; readonly value: 'RESILIENCIA' },
+              { readonly name: 'FORTALEZA_MENTAL'; readonly value: 'FORTALEZA_MENTAL' },
+              { readonly name: 'PROPOSITO'; readonly value: 'PROPOSITO' },
+              { readonly name: 'IDENTIDAD'; readonly value: 'IDENTIDAD' },
+              { readonly name: 'AUTODOMINIO'; readonly value: 'AUTODOMINIO' },
             ];
           };
           readonly EstadoReferido: {
