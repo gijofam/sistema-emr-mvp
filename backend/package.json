@@ -10,6 +10,7 @@
     "check": "node --check src/server.js",
     "test": "node --test",
     "seed": "node src/seed.js",
+    "handtags:import": "node src/scripts/importHandtags.js",
     "postinstall": "prisma skills sync || exit 0",
     "contract:emit": "prisma contract emit",
     "migration:plan": "prisma migration plan",
@@ -22,7 +23,8 @@
     "@prisma/client": "^7.10.0",
     "@prisma/orm-postgres": "^8.0.0-rc.11",
     "dotenv": "^18.0.1",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "pg": "^8.22.0"
   },
   "devDependencies": {
     "@prisma/cli-engine": "^0.4.0",
