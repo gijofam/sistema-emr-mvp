@@ -85,6 +85,7 @@
 .signature { color: #777d78; font-size: 11px; letter-spacing: .19em; }
 .rule { width: 1px; height: 70px; background: linear-gradient(transparent, var(--accent), transparent); }
 .story-preview { width: min(178px, 45vw); aspect-ratio: 9/16; padding: 20px 15px; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #343735; background: linear-gradient(155deg,#111411,#030403); box-shadow: 0 24px 80px rgba(0,0,0,.7); }
+.story-preview--rendered { display: block; padding: 0; border: 0; object-fit: cover; }
 .story-preview__logo { width: 75%; aspect-ratio: 2 / 1; object-fit: cover; align-self: center; transform: scale(.5); }.story-preview small { color: #848984; font-size: 7px; letter-spacing: .14em; }.story-preview p { color: #f2f1ed; font-family: Georgia,serif; font-size: clamp(12px,3.4vw,17px); line-height: 1.4; }
 .message-progress { width: min(100%, 380px); border-block: 1px solid var(--line); }
 .message-progress div { min-height: 52px; padding: 0 7px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); color: #666b67; font-size: 12px; letter-spacing: .13em; text-transform: uppercase; }.message-progress div:last-child { border: 0; }.message-progress .is-unlocked { color: #dfe1dc; }.message-progress b { color: var(--accent); }

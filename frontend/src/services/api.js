@@ -1,4 +1,4 @@
-const API_URL = (import.meta.env.MODE === 'https' ? '/api/v1' : (import.meta.env.VITE_API_URL || 'http://localhost:3000/api/v1')).replace(/\/$/, '')
+const API_URL = (import.meta.env.DEV ? '/api/v1' : (import.meta.env.VITE_API_URL || 'http://localhost:3000/api/v1')).replace(/\/$/, '')
 
 export class ApiError extends Error {
   constructor(status, payload) {

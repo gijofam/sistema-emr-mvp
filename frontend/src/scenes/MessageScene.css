@@ -1,4 +1,6 @@
 .scene--message .message-copy { display: grid; }
+.scene--message .scene__content > * { flex-shrink: 0; }
+.scene--message .message-quote { width: 100%; min-width: 0; overflow-wrap: anywhere; }
 .message-copy__space,
 .message-copy__visible { grid-area: 1 / 1; }
 .message-copy__space { visibility: hidden; }

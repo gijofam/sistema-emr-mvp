@@ -10,15 +10,15 @@ export default defineConfig(({ mode }) => ({
   plugins: [react()],
   server: {
     host: '0.0.0.0',
+    port: 5174,
+    strictPort: true,
+    proxy: {
+      '/api': 'http://127.0.0.1:3000',
+    },
     ...(mode === 'https' && {
-      port: 5173,
-      strictPort: true,
       https: {
         cert: readFileSync(certificate),
         key: readFileSync(privateKey),
-      },
-      proxy: {
-        '/api': 'http://127.0.0.1:3000',
       },
     }),
   },

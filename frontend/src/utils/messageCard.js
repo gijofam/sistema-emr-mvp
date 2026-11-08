@@ -22,6 +22,23 @@ const wrapText = (context, text, maxWidth) => {
   return lines
 }
 
+export const layoutQuote = (context, text) => {
+  const top = 680
+  const bottom = 1460
+  const maxWidth = 790
+  context.letterSpacing = '0px'
+  for (let fontSize = 58; fontSize >= 20; fontSize -= 1) {
+    context.font = `400 ${fontSize}px Arial, sans-serif`
+    const lines = wrapText(context, text, maxWidth)
+    const lineHeight = Math.round(fontSize * 1.28)
+    const blockHeight = fontSize + (lines.length - 1) * lineHeight
+    if (blockHeight <= bottom - top && lines.every((line) => context.measureText(line).width <= maxWidth)) {
+      return { lines, lineHeight, centerY: (top + bottom) / 2, fontSize, blockHeight, top, bottom }
+    }
+  }
+  throw new Error('El mensaje es demasiado largo para la imagen EMR.')
+}
+
 export const createMessageImage = async (message) => {
   const logo = await loadLogo()
   const canvas = document.createElement('canvas')
@@ -45,10 +62,14 @@ export const createMessageImage = async (message) => {
   context.font = '500 30px Arial, sans-serif'
   context.fillText(`TU MENSAJE #${String(message.codigo).padStart(3, '0')}`, 540, 580)
   context.fillStyle = '#f4f3ef'
-  context.font = '400 58px Arial, sans-serif'
-  const lines = wrapText(context, message.texto, 790)
-  const startY = 900 - ((lines.length - 1) * 42)
-  lines.forEach((line, index) => context.fillText(line, 540, startY + index * 84))
+  const quote = layoutQuote(context, message.texto)
+  context.textBaseline = 'middle'
+  quote.lines.forEach((line, index) => {
+    const y = quote.centerY + (index - (quote.lines.length - 1) / 2) * quote.lineHeight
+    context.fillText(line, 540, y)
+  })
+  context.textBaseline = 'alphabetic'
+  context.letterSpacing = '8px'
   context.fillStyle = '#7e887f'
   context.font = '500 25px Arial, sans-serif'
   context.fillText('@ELMACHORENACE', 540, 1660)

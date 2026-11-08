@@ -7,13 +7,22 @@ import { createMessageImage, downloadMessageImage, shareMessageImage } from '../
 export function ShareScene({ message, onContinue }) {
   const [feedback, setFeedback] = useState('')
   const [shareFile, setShareFile] = useState(null)
+  const [previewUrl, setPreviewUrl] = useState(null)
 
   useEffect(() => {
     let active = true
+    let imageUrl
     createMessageImage(message).then((file) => {
-      if (active) setShareFile(file)
+      if (active) {
+        imageUrl = URL.createObjectURL(file)
+        setShareFile(file)
+        setPreviewUrl(imageUrl)
+      }
     }).catch(() => {})
-    return () => { active = false }
+    return () => {
+      active = false
+      if (imageUrl) URL.revokeObjectURL(imageUrl)
+    }
   }, [message])
 
   const act = async (operation) => {
@@ -31,12 +40,15 @@ export function ShareScene({ message, onContinue }) {
   return (
     <SceneFrame className="scene--share">
       <SceneSequence as="span" className="eyebrow" text="HAZLO TUYO">
-        <div className="story-preview reveal" aria-label="Vista previa de la historia EMR">
-          <img className="story-preview__logo" src={BRAND.shareLogoUrl} alt="EMR — El Macho Renace" />
-          <small>TU MENSAJE #{String(message.codigo).padStart(3, '0')}</small>
-          <p>{message.texto}</p>
-          <small>@ELMACHORENACE</small>
-        </div>
+        {previewUrl ? (
+          <img className="story-preview story-preview--rendered reveal" src={previewUrl} alt={`Vista previa de tu mensaje EMR número ${message.codigo}`} />
+        ) : (
+          <div className="story-preview reveal" aria-label="Preparando imagen del mensaje EMR">
+            <img className="story-preview__logo" src={BRAND.shareLogoUrl} alt="EMR — El Macho Renace" />
+            <small>TU MENSAJE #{String(message.codigo).padStart(3, '0')}</small>
+            <small>@ELMACHORENACE</small>
+          </div>
+        )}
         <div className="action-group reveal reveal--delay-1">
           <ContinueButton onClick={() => act(downloadMessageImage)}>GUARDAR MENSAJE EMR</ContinueButton>
           <ContinueButton secondary onClick={() => act((currentMessage) => shareMessageImage(currentMessage, shareFile))}>COMPARTIR</ContinueButton>
